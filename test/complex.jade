@@ -1,0 +1,81 @@
+style.
+  body {
+    font-family: "Myriad Pro", "Open Sans","Helvetica",Arial;
+    font-size: 9pt;
+    font-weight: light;
+    line-height: 1.5;
+    color: #505558;
+    max-width: 100%;
+  }
+  h1 {
+    text-transform: uppercase;
+    padding-top: 0;
+    margin-top: 0;
+  }
+  h2 {
+    color: #F7941C;
+  }
+  .content {
+    padding-left: 35mm;
+    padding-top: 20mm;
+  }
+  .sidebar {
+    font-size: 8pt;
+    float:left;
+    padding-top: 20mm;
+    max-width: 30mm;
+  }
+  .sidebar strong {
+    display: block;
+    font-weight: light;
+    text-transform: uppercase;
+    color: #F7941C;
+  }
+  
+  table {
+    width: 100%;
+    font-size: 9pt;
+  }
+  th {
+    text-align:left;
+    background-color: #e5e5e5;
+  }
+  thead { display: table-header-group }
+  tfoot { display: table-row-group }
+  tr { page-break-inside: avoid }
+  
+  
+.sidebar
+  p
+    strong subject:
+    | Test Letter
+  p
+    strong date:
+    | #{today("DD.MM.YYYY")}
+    
+    
+.content    
+  h1 Great Report
+  h2 First Sub-Headline
+  p= name
+  p= mail
+  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  h2 Second Sub-Headline
+  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  p &nbsp;
+  h1 List of TV-Shows
+  table
+    thead
+      th TV Show Name
+      th Station
+      th My Rating
+    each showData, showName in tvshows
+      tr
+        td= showName
+        td= showData.station
+        td= showData.rating
+  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+    strong Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  img(src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png")
