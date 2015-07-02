@@ -60,7 +60,6 @@ module.exports =
                 )
               else
                 _html = jade.render(template, enrichData(data))
-                console.log wkhtmltopdf.command
                 throw "Error during html generation. Please check Jade syntax." if isEmptyOrNull(_html)
                 generatePDF(_html, output, config, (error, pdf) ->
                   callback(error, pdf)
@@ -100,46 +99,79 @@ generatePDF = (html, output, config, callback) ->
       fs.writeFile(_styleSheetFileName, config.stylesheet, (err) ->
         throw err if err?
 
-        htmlToPdf(html, _tempPDFName, _styleSheetFileName, config.margin ? {}, (code) ->
-          unless code?
-            exec("pdftk \"" + _tempPDFName + "\" update_info_utf8 \"" + _infoFileName + "\" output #{if config.letterhead? then '\"' + _tempPDFName + '_temp\"' else '\"' + output + '\"'}", (err, stdout, stderr) ->
-              throw err if err?
-              throw stderr if stderr
+        _filesToDelete = [_infoFileName, _styleSheetFileName, _tempPDFName]
 
-              _filesToDelete = [_infoFileName, _styleSheetFileName, _tempPDFName]
+        _doHTML2PDF = ->
+          htmlToPdf(html, _tempPDFName, _styleSheetFileName, config.margin ? {}, config.header, config.footer, (code) ->
+            unless code?
+              exec("pdftk \"" + _tempPDFName + "\" update_info_utf8 \"" + _infoFileName + "\" output #{if config.letterhead? then '\"' + _tempPDFName + '_temp\"' else '\"' + output + '\"'}", (err, stdout, stderr) ->
+                throw err if err?
+                throw stderr if stderr
 
-              _finish = ->
-                deleteFiles(_filesToDelete, (err) ->
-                  # do not handle errors
-                  callback(null, output)
-                  cleanupCallback()
-                )
+                _finish = ->
+                  deleteFiles(_filesToDelete, (err) ->
+                    # do not handle errors
+                    callback(null, output)
+                    cleanupCallback()
+                  )
 
-              if config.letterhead?
-                _filesToDelete.push(_tempPDFName + "_temp")
-                exec("pdftk " + _tempPDFName + "_temp multibackground \"" + config.letterhead + "\" output \"" + output + "\"", (err, stdout, stderr) ->
-                  throw err if err?
-                  throw stderr if stderr
+                if config.letterhead?
+                  _filesToDelete.push(_tempPDFName + "_temp")
+                  exec("pdftk " + _tempPDFName + "_temp multibackground \"" + config.letterhead + "\" output \"" + output + "\"", (err, stdout, stderr) ->
+                    throw err if err?
+                    throw stderr if stderr
+                    _finish()
+                  )
+                else
                   _finish()
+
+              )
+              return true
+            else
+              err = Error(code)
+              callback(err, null)
+          )
+
+        if config.header? or config.footer?
+          _writePageElements = (elements, callback) ->
+            i = elements.length
+            elements.forEach (element) ->
+              if config[element]?
+                _elementFileName = path.join(tempdir, element + ".html")
+                fs.writeFile(_elementFileName, config[element], (err) ->
+                  i--
+                  unless err
+                    config[element] = _elementFileName
+                    _filesToDelete.push(_elementFileName)
+                  if err
+                    callback err
+                    return
+                  else if i <= 0
+                    callback null
+                    return
+                  return
                 )
               else
-                _finish()
+                i--
+                return
+            return
+          _writePageElements(["header", "footer"], (err) ->
+            _doHTML2PDF()
+          )
+        else
+          _doHTML2PDF()
 
-            )
-            return true
-          else
-            err = Error(code)
-            callback(err, null)
-        )
       )
     )
 
 
-htmlToPdf = (html, output, styleSheet, margin, callback) ->
+htmlToPdf = (html, output, styleSheet, margin, header, footer, callback) ->
   wkhtmltopdf(html,
     encoding: "utf-8"
     output: output
     pageSize: "a4"
+    "header-html": header ? ""
+    "footer-html": footer ? ""
     "margin-top": margin.top ? 15
     "margin-bottom": margin.bottom ? 15
     "margin-left": margin.left ? 15
@@ -201,6 +233,10 @@ validateConfig = (config) ->
         type: "object"
         properties:
           creator:
+            type: "string"
+          author:
+            type: "string"
+          title:
             type: "string"
       executables:
         type: "object"

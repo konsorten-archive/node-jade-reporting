@@ -1,7 +1,7 @@
 {
   "name": "jade-reporting",
-  "version": "0.0.1",
-  "description": "Generates fully-costumizable PDF-reports from jade templates",
+  "version": "0.1.0",
+  "description": "Generates fully customizable PDF-reports from Jade templates and JSON Data",
   "scripts": {
     "test": "coffee --compile --output dist/ src/ && coffee test/test.coffee -n"
   },
@@ -13,10 +13,21 @@
     "url": "https://github.com/konsorten/jade-reporting"
   },
   "author": "Michael Müller",
-  "license": "",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/konsorten/jade-reporting/issues"
   },
+  "keywords": [
+    "pdf",
+    "report",
+    "jade",
+    "html",
+    "node",
+    "html2pdf",
+    "webkit",
+    "wkhtmltopdf",
+    "htmltk"
+  ],
   "homepage": "https://github.com/konsorten/jade-reporting",
   "dependencies": {
     "jade": "^1.11.0",
