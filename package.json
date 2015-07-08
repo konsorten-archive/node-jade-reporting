@@ -2,6 +2,7 @@
   "name": "jade-reporting",
   "version": "0.1.0",
   "description": "Generates fully customizable PDF-reports from Jade templates and JSON Data",
+  "main": "./dist/module",
   "scripts": {
     "test": "coffee --compile --output dist/ src/ && coffee test/test.coffee -n"
   },
